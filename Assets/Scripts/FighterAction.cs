@@ -18,7 +18,7 @@ public class FighterAction : MonoBehaviour
 
     private GameObject currentAttack;
     private GameObject meleeAttack;
-    private GameObject rangeAttack;
+    private GameObject magicAttack;
 
     public void SelectAttack(string btn)
     {
@@ -29,10 +29,12 @@ public class FighterAction : MonoBehaviour
         }
         if (btn.CompareTo("melee") == 0)
         {
-            Debug.Log("Melee attack");
+            currentAttack = meleeAttack;
+            meleeAttack.GetComponent<AttackScript>().Attack(victim);
         } else if (btn.CompareTo("magic") == 0)
         {
-            Debug.Log("Magic attack");
+            currentAttack = magicAttack;
+            magicAttack.GetComponent<AttackScript>().Attack(victim);
         } else
         {
             Debug.Log("Run");
