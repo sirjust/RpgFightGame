@@ -14,13 +14,13 @@ public class AttackScript : MonoBehaviour
     [SerializeField]
     private float magicCost;
     [SerializeField]
-    private bool minAttackMultiplier;
+    private float minAttackMultiplier;
     [SerializeField]
-    private bool maxAttackMultiplier;
+    private float maxAttackMultiplier;
     [SerializeField]
-    private bool minDefenseMultiplier;
+    private float minDefenseMultiplier;
     [SerializeField]
-    private bool maxDefenseMultiplier;
+    private float maxDefenseMultiplier;
 
     private FighterStats attackerStats;
     private FighterStats targetStats;
@@ -36,24 +36,24 @@ public class AttackScript : MonoBehaviour
     public void Attack(GameObject victim)
     {
         attackerStats = owner.GetComponent<FighterStats>();
-        targetStats = victim.GetComponent<FighterAction>();
+        targetStats = victim.GetComponent<FighterStats>();
 
-        if(attackerStats.magic >= magicCost)
-        {
-            float multiplier = Random.Range(minAttackMultiplier, maxAttackMultiplier);
-            attackerStats.updateManaFill(magicCost);
+        //if (attackerStats.magic >= magicCost)
+        //{
+        //    float multiplier = Random.Range(minAttackMultiplier, maxAttackMultiplier);
+        //    attackerStats.updateManaFill(magicCost);
 
-            damage = multiplier * attackerStats.attack;
-            if (magicAttack)
-            {
-                damage = multiplier * attackerStats.magic;
-                attackerStats.magic -= magicCost;
-            }
+        //    damage = multiplier * attackerStats.attack;
+        //    if (magicAttack)
+        //    {
+        //        damage = multiplier * attackerStats.magic;
+        //        attackerStats.magic -= magicCost;
+        //    }
 
-            float defenseMultiplier = Random.Range(minDefenseMultiplier, maxDefenseMultiplier);
-            damage = Mathf.Max(0, damage - (defenseMultiplier * targetStats.defense));
-            owner.GetComponent<Animator>().Play(animationName);
-            targetStats.ReceiveDamage(damage);
-        }
+        //    float defenseMultiplier = Random.Range(minDefenseMultiplier, maxDefenseMultiplier);
+        //    damage = Mathf.Max(0, damage - (defenseMultiplier * targetStats.defense));
+        //    owner.GetComponent<Animator>().Play(animationName);
+        //    targetStats.ReceiveDamage(damage);
+        //}
     }
 }
