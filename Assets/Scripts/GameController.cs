@@ -50,6 +50,7 @@ public class GameController : MonoBehaviour
             }
             else
             {
+                this.battleMenu.SetActive(false);
                 string attackType = Random.Range(0, 2) == 1 ? "Melee" : "Magic";
                 currentUnit.GetComponent<FighterAction>().SelectAttack(attackType);
             }
