@@ -17,7 +17,7 @@ public class FighterStats : MonoBehaviour, IComparable
     public float health;
     public float magic;
     public float melee;
-    public float range;
+    public float magicRange;
     public float defense;
     public float speed;
     public float experience;
@@ -40,7 +40,9 @@ public class FighterStats : MonoBehaviour, IComparable
     private float xNewHealthScale;
     private float xNewMagicScale;
 
-    private void Start()
+    private GameObject gameController;
+
+    void Awake()
     {
         healthTransform = healthFill.GetComponent<RectTransform>();
         healthScale = healthFill.transform.localScale;
@@ -50,6 +52,8 @@ public class FighterStats : MonoBehaviour, IComparable
 
         startHealth = health;
         startMagic = magic;
+
+        gameController = GameObject.Find("GameController");
     }
 
     public void ReceiveDamage(float damage)
@@ -65,18 +69,42 @@ public class FighterStats : MonoBehaviour, IComparable
             gameObject.tag = "Dead";
             Destroy(healthFill);
             Destroy(gameObject);
-        } else
+        } else if (damage > 0)
         {
             xNewHealthScale = healthScale.x * (health / startHealth);
             healthFill.transform.localScale = new Vector2(xNewHealthScale, healthScale.y);
         }
+        if(damage > 0)
+        {
+            gameController.GetComponent<GameController>().battleText.gameObject.SetActive(true);
+            gameController.GetComponent<GameController>().battleText.text = damage.ToString();
+        }
+        Invoke("ContinueGame", 2);
     }
 
     public void UpdateMagicFill(float cost)
     {
-        magic -= cost;
-        xNewMagicScale = magicScale.x * (magic / startMagic);
-        magicFill.transform.localScale = new Vector2(xNewMagicScale, magicScale.y);
+        if(cost > 0)
+        {
+            magic -= cost;
+            xNewMagicScale = magicScale.x * (magic / startMagic);
+            magicFill.transform.localScale = new Vector2(xNewMagicScale, magicScale.y);
+        }
+    }
+
+    public bool GetDead()
+    {
+        return isDead;
+    }
+
+    public void ContinueGame()
+    {
+        GameObject.Find("GameController").GetComponent<GameController>().NextTurn();
+    }
+
+    public void CalculateNextTurn(int currentTurn)
+    {
+        nextActTurn = currentTurn + Mathf.CeilToInt(100f / speed);
     }
 
     public int CompareTo(object otherStats)
@@ -84,4 +112,5 @@ public class FighterStats : MonoBehaviour, IComparable
         int nex = nextActTurn.CompareTo(((FighterStats)otherStats).nextActTurn);
         return nex;
     }
+
 }
